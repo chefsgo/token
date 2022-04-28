@@ -1,7 +1,6 @@
 package token
 
 import (
-	"fmt"
 	"time"
 
 	. "github.com/chefsgo/base"
@@ -98,8 +97,6 @@ func (this *Module) Launch() {
 	if this.launched {
 		return
 	}
-
-	fmt.Println("token Launch")
 
 	this.launched = true
 }

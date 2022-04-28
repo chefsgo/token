@@ -3,7 +3,7 @@ package token
 import "errors"
 
 const (
-	NAME = "token"
+	NAME = "TOKEN"
 )
 
 var (
