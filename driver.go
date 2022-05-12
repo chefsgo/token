@@ -17,21 +17,3 @@ type (
 		Validate(token string) (*Token, error)
 	}
 )
-
-//Driver 为log模块注册驱动
-func (this *Module) Driver(name string, driver Driver, override bool) {
-	this.mutex.Lock()
-	defer this.mutex.Unlock()
-
-	if driver == nil {
-		panic("Invalid log driver: " + name)
-	}
-
-	if override {
-		this.drivers[name] = driver
-	} else {
-		if this.drivers[name] == nil {
-			this.drivers[name] = driver
-		}
-	}
-}

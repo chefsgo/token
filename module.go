@@ -69,29 +69,27 @@ type (
 	}
 )
 
-// Sign 签名
-func (this *Module) Sign(token *Token, expiries ...time.Duration) (string, error) {
-	if module.connect == nil {
-		return "", errInvalidTokenConnection
+//Driver 为log模块注册驱动
+func (this *Module) Driver(name string, driver Driver, override bool) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
+
+	if driver == nil {
+		panic("Invalid log driver: " + name)
 	}
 
-	expiry := module.config.Expiry
-	if len(expiries) > 0 {
-		expiry = expiries[0]
+	if override {
+		this.drivers[name] = driver
+	} else {
+		if this.drivers[name] == nil {
+			this.drivers[name] = driver
+		}
 	}
-
-	if expiry > 0 {
-		token.Expiry = time.Now().Add(expiry).Unix()
-	}
-
-	return module.connect.Sign(token)
 }
 
-// Validate 验签
-func (this *Module) Validate(token string) (*Token, error) {
-	if module.connect == nil {
-		return nil, errInvalidTokenConnection
-	}
+func (this *Module) Config(config Config, override bool) {
+	this.mutex.Lock()
+	defer this.mutex.Unlock()
 
-	return module.connect.Validate(token)
+	this.config = config
 }
